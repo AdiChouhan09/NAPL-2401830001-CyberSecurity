@@ -1,0 +1,44 @@
+package main
+
+import "fmt"
+
+func main() {
+
+	students := []string{"Aditya", "Rahul", "Priya"}
+
+	fmt.Println("Initial Slice:", students)
+
+	students = append(students, "Ankit")
+	fmt.Println("After Adding:", students)
+
+	students = append(students[:1], students[2:]...)
+	fmt.Println("After Removing Index 1:", students)
+
+	students[1] = "Neha"
+	fmt.Println("After Updating Index 1:", students)
+
+	marks := map[string]int{
+		"Math":    85,
+		"Science": 90,
+		"English": 78,
+	}
+
+	fmt.Println("\nInitial Map:", marks)
+
+	marks["Computer"] = 95
+	fmt.Println("After Inserting Computer:", marks)
+
+	delete(marks, "English")
+	fmt.Println("After Deleting English:", marks)
+
+	subject := "Science"
+	mark, exists := marks[subject]
+
+	if exists {
+		fmt.Println("Lookup", subject+":", mark)
+	} else {
+		fmt.Println(subject, "not found")
+	}
+
+	fmt.Println("Final Map:", marks)
+}
