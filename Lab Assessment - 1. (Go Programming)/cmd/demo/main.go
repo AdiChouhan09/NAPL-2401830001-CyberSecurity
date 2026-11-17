@@ -10,7 +10,6 @@ import (
 func main() {
 	var inv inventory.Inventory
 
-	// Add products.
 	items := []inventory.Item{
 		{ID: 1, Name: "Notebook", Quantity: 10, Price: 50},
 		{ID: 2, Name: "Pen", Quantity: 20, Price: 10},
@@ -23,7 +22,6 @@ func main() {
 		}
 	}
 
-	// Update the pen.
 	err := inv.Update(inventory.Item{
 		ID:       2,
 		Name:     "Pen",
@@ -34,12 +32,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Remove the eraser.
 	if err := inv.Remove(3); err != nil {
 		log.Fatal(err)
 	}
 
-	// Calculate the summary using a goroutine and channel.
 	result := inv.SummaryAsync()
 
 	fmt.Println("Current inventory:")
