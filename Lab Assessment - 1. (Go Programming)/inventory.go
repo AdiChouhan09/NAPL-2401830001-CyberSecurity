@@ -14,7 +14,6 @@ var (
 	ErrNotFound    = errors.New("item not found")
 )
 
-// Item represents a product in the inventory.
 type Item struct {
 	ID       int
 	Name     string
@@ -22,14 +21,11 @@ type Item struct {
 	Price    float64
 }
 
-// Inventory stores items in a slice.
-// The mutex protects the slice during concurrent access.
 type Inventory struct {
 	mu    sync.RWMutex
 	items []Item
 }
 
-// validate checks whether an item contains valid data.
 func validate(item Item) error {
 	if item.ID <= 0 {
 		return fmt.Errorf("%w: ID must be positive", ErrInvalidItem)
@@ -53,7 +49,6 @@ func validate(item Item) error {
 	return nil
 }
 
-// Add inserts an item after validating it and checking for duplicate IDs.
 func (inv *Inventory) Add(item Item) error {
 	if err := validate(item); err != nil {
 		return err
@@ -74,7 +69,6 @@ func (inv *Inventory) Add(item Item) error {
 	return nil
 }
 
-// Update replaces the item with the matching ID.
 func (inv *Inventory) Update(item Item) error {
 	if err := validate(item); err != nil {
 		return err
@@ -94,7 +88,6 @@ func (inv *Inventory) Update(item Item) error {
 	return fmt.Errorf("%w: %d", ErrNotFound, item.ID)
 }
 
-// Remove deletes an item using its ID.
 func (inv *Inventory) Remove(id int) error {
 	if id <= 0 {
 		return fmt.Errorf("%w: ID must be positive", ErrInvalidItem)
@@ -117,7 +110,6 @@ func (inv *Inventory) Remove(id int) error {
 	return fmt.Errorf("%w: %d", ErrNotFound, id)
 }
 
-// Items returns a copy of the inventory items.
 func (inv *Inventory) Items() []Item {
 	inv.mu.RLock()
 	defer inv.mu.RUnlock()
@@ -125,15 +117,12 @@ func (inv *Inventory) Items() []Item {
 	return append([]Item(nil), inv.items...)
 }
 
-// Summary holds inventory statistics.
 type Summary struct {
 	ItemCount     int
 	TotalQuantity int
 	TotalValue    float64
 }
 
-// SummaryAsync calculates statistics in a goroutine.
-// It sends one result through the channel and then closes it.
 func (inv *Inventory) SummaryAsync() <-chan Summary {
 	items := inv.Items()
 	result := make(chan Summary, 1)
